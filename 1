@@ -1,0 +1,12 @@
+import pandas as pd
+
+# URL of the CSV file
+csv_url = 'https://docs.google.com/spreadsheets/d/e/2PACX-/pub?gid=721437021&single=true&range=A1:Z&output=csv'
+# Read the CSV data from the URL
+data = pd.read_csv(csv_url)
+
+# Save the data as an Excel file
+output_path = "output.xlsx"
+data.to_excel(output_path, index=False)
+
+print("File saved at:", output_path)
