@@ -1,0 +1,68 @@
+#step_3: single order algo
+#1333-56@4&BUY/NSE
+#securityid-quantity@priceBUYORSELl/exchange
+
+input_str = input("")
+
+# Splitting the string based on the specified delimiters
+first_part = input_str.split('-')[0]  # Before the '-'
+second_part = input_str.split('-')[1].split('@')[0]  # After '-' and before '@'
+third_part = input_str.split('@')[1].split('&')[0]  # After '@' and before '&'
+fourth_part = input_str.split('&')[1].split('/')[0]  # After '&' and before '/'
+fifth_part = input_str.split('/')[1]  # After '/'
+# Convert quantity and price to the appropriate data types
+
+quantity = int(second_part)  # Ensure quantity is an integer
+price = float(third_part)    # Ensure price is a float
+
+# Map transaction_type to dhan.BUY or dhan.SELL
+if fourth_part.upper() == "BUY":
+    transaction_type = dhan.BUY
+elif fourth_part.upper() == "SELL":
+    transaction_type = dhan.SELL
+else:
+    transaction_type = dhan.BUY
+
+if fifth_part == "MCX":
+    exchange_segment = dhan.MCX
+elif fifth_part == "NSE_FNO":
+    exchange_segment = dhan.NSE_FNO
+elif fifth_part == "NSE":
+    exchange_segment = dhan.NSE
+
+elif fifth_part == "BSE":
+    exchange_segment = dhan.BSE
+
+elif fifth_part == "BSE_FNO":
+    exchange_segment = dhan.BSE_FNO
+
+else:
+    exchange_segment = '' # Replace with a valid default
+
+
+# Determine order_type and product_type based on price
+if price > 0:  # If price is filled (non-zero)
+    order_type = dhan.LIMIT
+    product_type = dhan.MARGIN  # Delivery product
+else:  # If price is not filled (zero)
+    order_type = dhan.MARKET
+    product_type = dhan.INTRA  # Intraday product
+
+# Place the order
+try:
+    order_response = dhan.place_order(
+        security_id=first_part,
+price=price, # Use float price
+        quantity=quantity,
+        transaction_type=transaction_type,  # Use mapped transaction type
+        exchange_segment=exchange_segment,  # Assuming NSE as the exchange segment
+        order_type=order_type,  # Adjusted based on price
+        product_type=product_type  # Adjusted based on price
+    )
+
+    # Print the response (or handle as needed)
+    print("Order placed successfully:", order_response)
+
+
+except Exception as e:
+    print("An error occurred while placing the order:", e)
