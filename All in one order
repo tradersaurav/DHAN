@@ -1,4 +1,4 @@
-# Sample input strings for the trading orders
+#securityid-quantity@priceBUYORSELl/exchange
 input_str = ['1333-56@4&SELL/NSE', '13-56@4&BUY/NSE']
 
 # Iterate over each input string to process orders
